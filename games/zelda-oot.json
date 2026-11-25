@@ -1,0 +1,92 @@
+{
+  "name": "The Legend of Zelda: Ocarina of Time",
+  "aliases": [
+    "Ocarina of Time",
+    "OoT",
+    "Zelda Ocarina of Time",
+    "The Legend of Zelda: Ocarina of Time"
+  ],
+  "publisher": "Nintendo",
+  "publisher_policy": "https://www.nintendo.co.jp/networkservice_guideline/en/index.html",
+  "released": true,
+  "accent": "#3DDC84",
+  "whisper_prompt": "The Legend of Zelda: Ocarina of Time, Nintendo 64, Link, Zelda, Ganondorf, Navi, Hyrule, Epona, Kokiri Forest, Deku Tree, Master Sword, Z-targeting, Shigeru Miyamoto, Water Temple. Gerudo Desert, Gerudo Valley, Zora's Domain, Lake Hylia, Death Mountain, Kakariko Village, Goron City, Dodongo's Cavern, Jabu-Jabu, Darunia, Forest Temple, ReDeads, Hyrule Field.",
+  "subreddits": [
+    "zelda",
+    "OcarinaOfTime"
+  ],
+  "news_query": "\"Ocarina of Time\"",
+  "youtube_query": "Ocarina of Time shorts",
+  "hashtags": [
+    "#zelda",
+    "#ocarinaoftime",
+    "#nintendo",
+    "#n64",
+    "#retrogaming",
+    "#shorts"
+  ],
+  "footage_tags": [
+    "mapa",
+    "dungeon",
+    "personagens",
+    "combate-leve",
+    "menu"
+  ],
+  "safe_opening_tags": [
+    "mapa",
+    "personagens"
+  ],
+  "allowed_footage": [
+    "official_trailer",
+    "official_screenshot",
+    "own_gameplay",
+    "licensed"
+  ],
+  "leak_terms": [
+    "vazad",
+    "vazou",
+    "vazamento",
+    "leak",
+    "leaked",
+    "dev build",
+    "pre-release"
+  ],
+  "honest_labels": {
+    "en": [
+      "BREAKDOWN",
+      "FAN THEORY",
+      "HIDDEN DETAIL"
+    ],
+    "pt": [
+      "ANÁLISE",
+      "TEORIA DE FÃ",
+      "DETALHE ESCONDIDO"
+    ]
+  },
+  "notes": {
+    "en": "Nintendo's guidelines allow sharing gameplay with your own creative input and commentary; plain re-uploads of footage, soundtracks or cutscenes without commentary are not covered. No leaked or unreleased material.",
+    "pt": "As diretrizes da Nintendo permitem gameplay com contribuição criativa e comentário próprios; reupload puro de gameplay, trilha ou cutscene sem comentário não é coberto. Nada de material vazado."
+  },
+  "fallback_exclude_tags": [
+    "combate-leve"
+  ],
+  "say_as": {
+    "en": {
+      "N64": "N sixty-four",
+      "OoT": "Ocarina of Time"
+    },
+    "pt": {
+      "N64": "N sessenta e quatro"
+    }
+  },
+  "known_facts": "The Legend of Zelda: Ocarina of Time was released by Nintendo for the Nintendo 64 in November 1998. Never describe details of an image you were not shown.",
+  "radar_exclude": [
+    "mod",
+    "rom hack",
+    "romhack",
+    "randomizer",
+    "fan made",
+    "fan-made",
+    "meme"
+  ]
+}

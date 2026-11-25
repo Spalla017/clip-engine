@@ -1,0 +1,30 @@
+{
+  "name": "Call of Duty: Modern Warfare 4",
+  "aliases": ["Call of Duty", "Modern Warfare 4", "MW4", "COD"],
+  "publisher": "Activision / Infinity Ward",
+  "publisher_policy": "https://www.activision.com/legal/terms-of-use",
+  "released": true,
+  "accent": "#B6FF3B",
+  "whisper_prompt": "Call of Duty, Modern Warfare 4, MW4, Infinity Ward, Season 1, Shoot House, Backstab, DMZ, X01, exfil, UAV, Ghost perk, Joint Fire, Warzone, Ranked, Price.",
+  "subreddits": ["CallOfDuty", "ModernWarfareIV", "DMZ"],
+  "news_query": "\"Modern Warfare 4\"",
+  "youtube_query": "Modern Warfare 4 shorts",
+  "hashtags": ["#callofduty", "#mw4", "#modernwarfare4", "#cod", "#shorts"],
+  "footage_tags": ["mapa", "soldados", "veiculos", "dmz", "combate-leve"],
+  "safe_opening_tags": ["mapa", "soldados", "veiculos"],
+  "allowed_footage": ["official_trailer", "official_screenshot", "own_gameplay", "licensed"],
+  "leak_terms": ["vazad", "vazou", "vazamento", "leak", "leaked", "dev build", "pre-release", "datamine", "datamined"],
+  "honest_labels": {
+    "en": ["SEASON 1 UPDATE", "PATCH NOTES", "WHAT CHANGED"],
+    "pt": ["ATUALIZAÇÃO DA SEASON 1", "NOTAS DO PATCH", "O QUE MUDOU"]
+  },
+  "notes": "Lançado em 2026-10-23. B-roll só dos trailers do canal oficial Call of Duty (UC9YydG57epLqxA9cTzZXSeQ), mudo. Combate é o tema do jogo: abrir com mapa/soldados, nada de cena gráfica nos 3 primeiros segundos, vocabulário ad-safe.",
+  "known_facts": "Modern Warfare 4 launched Oct 23, 2026 (PS5, Xbox Series X|S, PC, Switch 2), set on the Korean Peninsula. Season 1 started early Nov 2026: Shoot House and Backstab maps, two new weapons, DMZ zone X01. Nov 10 patch: Scavenger Bonus cash on failed DMZ exfils, X01 UAV nerf, Ghost no longer hides unsuppressed shooters. Joint Fire event: 3x progression in duos, 5x in squads of 3+. Ranked returns in Season 2 for Multiplayer and Warzone.",
+  "fallback_exclude_tags": ["combate-leve"],
+  "say_as": {
+    "en": {"MW4": "M W four", "X01": "X zero one", "COD": "C O D", "UAV": "U A V", "3x": "triple", "5x": "five times"},
+    "pt": {"MW4": "M W quatro"}
+  },
+  "news_lang": {"en": "hl=en-US&gl=US&ceid=US:en", "pt": "hl=pt-BR&gl=BR&ceid=BR:pt-419"},
+  "radar_exclude": ["ai generated", "concept", "fan made", "fake", "courtesy of", "footage via"]
+}

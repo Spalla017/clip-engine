@@ -1,0 +1,89 @@
+{
+  "name": "Minecraft",
+  "aliases": [
+    "Minecraft",
+    "MC",
+    "Minecraft Java",
+    "Minecraft Bedrock"
+  ],
+  "publisher": "Mojang Studios / Microsoft",
+  "publisher_policy": "https://www.minecraft.net/en-us/usage-guidelines",
+  "released": true,
+  "accent": "#5BD94A",
+  "whisper_prompt": "Minecraft, Mojang, throwing disc, off-hand, Bedrock Edition, Java Edition, netherite, diamond, copper, iron, gold, trident, Loyalty, creeper, skeleton, zombie, game drop, TwitchCon.",
+  "subreddits": [
+    "Minecraft",
+    "minecraftsuggestions"
+  ],
+  "news_query": "\"Minecraft\" Mojang",
+  "youtube_query": "Minecraft shorts",
+  "hashtags": [
+    "#minecraft",
+    "#mojang",
+    "#gaming",
+    "#shorts"
+  ],
+  "footage_tags": [
+    "disc-throw",
+    "disc-tiers",
+    "ricochet",
+    "combat",
+    "disc-alt",
+    "copper",
+    "gold",
+    "nether",
+    "logo"
+  ],
+  "safe_opening_tags": [
+    "disc-throw",
+    "ricochet",
+    "combat"
+  ],
+  "allowed_footage": [
+    "official_trailer",
+    "official_screenshot",
+    "own_gameplay",
+    "licensed",
+    "own_graphic"
+  ],
+  "leak_terms": [
+    "vazad",
+    "vazou",
+    "vazamento",
+    "leak",
+    "leaked",
+    "dev build",
+    "pre-release",
+    "datamine",
+    "datamined"
+  ],
+  "honest_labels": {
+    "en": [
+      "CONFIRMED BY MOJANG",
+      "COMING IN 2027",
+      "WHAT MOJANG SHOWED"
+    ],
+    "pt": [
+      "CONFIRMADO PELA MOJANG",
+      "CHEGA EM 2027",
+      "O QUE A MOJANG MOSTROU"
+    ]
+  },
+  "notes": "Mojang usage guidelines: you may use Minecraft name, footage and screenshots in videos, but never imply the video is official, approved by or connected to Mojang/Microsoft; no Mojang logo as our branding; nothing harmful or deceptive. Official reveal footage = YouTube channel 'Minecraft' only, muted. Never present fan-site 'recipes' or datamines as official. Audience is young: zero gore, zero swearing.",
+  "fallback_exclude_tags": [
+    "logo",
+    "copper",
+    "gold",
+    "nether"
+  ],
+  "known_facts": "Throwing Disc revealed by Mojang at TwitchCon San Diego, Nov 14 2026 (official video 5um9-i2Ta7w). Coming in the first game drop of 2027, no exact date. Official: throw it, it passes through enemies hurting them, then comes back to you; medium range by design; ricocheting off surfaces extends its flight (trick shots); craftable from copper, iron, gold, diamond and netherite; throwable from main hand or off-hand; balanced against existing weapons. Full off-hand support comes to Bedrock (next preview). NOT official yet: exact crafting recipe/grid, damage numbers, cooldown, range in blocks. Not in any snapshot as of Nov 19 2026.",
+  "say_as": {
+    "en": {
+      "MC": "Minecraft",
+      "Netherite": "Nether-ight"
+    },
+    "pt": {
+      "MC": "Minecraft"
+    }
+  }
+}

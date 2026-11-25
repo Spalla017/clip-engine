@@ -1,0 +1,95 @@
+"""Second opinion on a finished short: Gemini watches the video (picture + sound) and lists what to improve.
+
+  python -m src.gemini_review output/VIDEO.mp4 [--lang en] [--game gta6]
+
+It sends a small 480p copy of the video to Google's Gemini API with the user's own key (.env).
+The answer is advice, not a verdict: the compliance gate still decides what is released, and every
+timestamp it gives must be checked on the video before acting on it (models misreport times).
+"""
+import argparse
+import base64
+import json
+import os
+import urllib.error
+import urllib.request
+from pathlib import Path
+
+from .common import LANGS, WORK, ffmpeg, load_env, load_game, probe, say, write_json
+
+MODELS = ["gemini-3.5-flash", "gemini-3.5-flash-lite"]
+
+PROMPT = """You are a strict short-form video editor reviewing a vertical gaming short about {game} before it is posted
+on YouTube Shorts and TikTok. The video is supposed to be entirely in {lang}. Watch it with sound.
+
+Answer with JSON only:
+{{"scores": {{"hook_first_3s": 0-10, "voice_naturalness": 0-10, "voice_clarity": 0-10, "captions": 0-10,
+             "visual_pacing": 0-10, "footage_relevance": 0-10, "audio_mix": 0-10, "overall": 0-10}},
+  "language_ok": true/false,
+  "issues": [{{"time": "mm:ss", "severity": "high|medium|low", "what": "one sentence", "fix": "one sentence"}}],
+  "repeated_shots": ["mm:ss and mm:ss: what repeats"],
+  "burned_in_text_or_logos": ["mm:ss: what is visible that is not our caption/headline/card"],
+  "strengths": ["short"],
+  "top_3_improvements": ["short, concrete"]}}
+
+Be specific and honest. Only report what you actually see or hear; if unsure about a timestamp say so in "what".
+Our own layers are: the word-by-word caption, the pill headline at the top, the opening hook text, cards, a neon
+magnifier circle, a thin progress bar. Everything else with text is burned into the footage."""
+
+
+def review(video, game, lang="en"):
+    load_env()
+    video = Path(video)
+    small = WORK / f"_review_{video.stem}.mp4"
+    ffmpeg(["-i", video, "-vf", "scale=-2:854,fps=15", "-c:v", "libx264", "-preset", "veryfast", "-crf", "30",
+            "-c:a", "aac", "-b:a", "64k", "-ac", "1", small], "review")
+    data = base64.b64encode(small.read_bytes()).decode()
+    size_mb = small.stat().st_size / 1048576
+    small.unlink(missing_ok=True)
+    body = {"contents": [{"parts": [{"inline_data": {"mime_type": "video/mp4", "data": data}},
+                                    {"text": PROMPT.format(game=game["name"], lang=LANGS[lang]["name"])}]}],
+            "generationConfig": {"response_mime_type": "application/json", "temperature": 0.2}}
+    keys = [os.environ[k] for k in ("GEMINI_API_KEY", "GEMINI_API_KEY_2", "GEMINI_API_KEY_3") if os.environ.get(k)]
+    errors = []
+    for model in MODELS:
+        for key in keys:
+            try:
+                req = urllib.request.Request(
+                    f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent",
+                    data=json.dumps(body).encode(), headers={"Content-Type": "application/json", "x-goog-api-key": key})
+                with urllib.request.urlopen(req, timeout=300) as r:
+                    out = json.loads(r.read().decode())
+                text = out["candidates"][0]["content"]["parts"][0]["text"]
+                result = json.loads(text.strip().strip("`").removeprefix("json"))
+                result["model"] = model
+                result["sent_mb"] = round(size_mb, 1)
+                return result
+            except urllib.error.HTTPError as e:
+                errors.append(f"{model}: HTTP {e.code}")
+            except Exception as e:
+                errors.append(f"{model}: {type(e).__name__}")
+    raise RuntimeError("Gemini review failed: " + "; ".join(errors[-4:]))
+
+
+def main():
+    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("video")
+    ap.add_argument("--game", default="gta6")
+    ap.add_argument("--lang", default="en", choices=list(LANGS))
+    a = ap.parse_args()
+    r = review(a.video, load_game(a.game), a.lang)
+    out = write_json(Path(a.video).with_name(Path(a.video).stem + "_review.json"), r)
+    s = r.get("scores", {})
+    say(f"{Path(a.video).name} | {r['model']} | overall {s.get('overall')} | " + " ".join(
+        f"{k.split('_')[0]} {v}" for k, v in s.items() if k != "overall") + f" | language_ok {r.get('language_ok')}")
+    for i in r.get("issues", []):
+        say(f"  [{i.get('severity')}] {i.get('time')} {i.get('what')} -> {i.get('fix')}")
+    for k in ("repeated_shots", "burned_in_text_or_logos"):
+        for x in r.get(k, []):
+            say(f"  {k}: {x}")
+    for x in r.get("top_3_improvements", []):
+        say(f"  melhorar: {x}")
+    say(f"  salvo: {out}")
+
+
+if __name__ == "__main__":
+    main()

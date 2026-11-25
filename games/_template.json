@@ -1,0 +1,72 @@
+{
+  "name": "Nome do Jogo",
+  "aliases": [
+    "Nome do Jogo",
+    "Sigla"
+  ],
+  "publisher": "Editora",
+  "publisher_policy": "URL da política de vídeo/conteúdo da editora",
+  "released": true,
+  "accent": "#00E5FF",
+  "whisper_prompt": "Nomes próprios do jogo, personagens, mapas, modos.",
+  "subreddits": [
+    "subreddit_sem_r"
+  ],
+  "news_query": "\"Nome do Jogo\"",
+  "youtube_query": "Nome do Jogo shorts",
+  "hashtags": [
+    "#nomedojogo",
+    "#games",
+    "#shorts"
+  ],
+  "footage_tags": [
+    "mapa",
+    "combate-leve",
+    "veiculos",
+    "personagens",
+    "menu"
+  ],
+  "safe_opening_tags": [
+    "mapa",
+    "veiculos"
+  ],
+  "allowed_footage": [
+    "official_trailer",
+    "official_screenshot",
+    "own_gameplay",
+    "licensed"
+  ],
+  "leak_terms": [
+    "vazad",
+    "vazou",
+    "vazamento",
+    "leak",
+    "leaked",
+    "dev build",
+    "pre-release"
+  ],
+  "honest_labels": {
+    "en": [
+      "BREAKDOWN",
+      "COMMUNITY THEORY",
+      "HIDDEN DETAIL"
+    ],
+    "pt": [
+      "ANÁLISE",
+      "TEORIA DA COMUNIDADE",
+      "DETALHE ESCONDIDO"
+    ]
+  },
+  "notes": "Regras específicas da editora e do jogo.",
+  "fallback_exclude_tags": [
+    "combate-leve"
+  ],
+  "say_as": {
+    "en": {
+      "Sigla 2": "Sigla two"
+    },
+    "pt": {
+      "Sigla 2": "Sigla dois"
+    }
+  }
+}

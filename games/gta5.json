@@ -1,0 +1,134 @@
+{
+  "name": "GTA 5",
+  "aliases": [
+    "GTA 5",
+    "GTA V",
+    "Grand Theft Auto V"
+  ],
+  "publisher": "Rockstar Games / Take-Two",
+  "publisher_policy": "https://support.rockstargames.com/articles/7bNaeoMFTV0iUDGhStTXvz/policy-on-posting-copyrighted-rockstar-games-material",
+  "released": true,
+  "accent": "#FF2E88",
+  "whisper_prompt": "GTA 5, Grand Theft Auto V, Los Santos, Michael, Franklin, Trevor, Lamar, Rockstar.",
+  "subreddits": [
+    "GTA6",
+    "GTA"
+  ],
+  "news_query": "\"GTA 5\"",
+  "youtube_query": "GTA 5 shorts",
+  "hashtags": [
+    "#gta5",
+    "#gtav",
+    "#rockstargames",
+    "#games",
+    "#shorts"
+  ],
+  "footage_tags": [
+    "acao-leve",
+    "ambrosia",
+    "carros",
+    "cidade",
+    "gta5",
+    "keys",
+    "natureza",
+    "noite",
+    "personagens",
+    "praia"
+  ],
+  "safe_opening_tags": [
+    "cidade",
+    "carros",
+    "praia",
+    "natureza"
+  ],
+  "allowed_footage": [
+    "official_trailer",
+    "official_screenshot",
+    "own_gameplay",
+    "licensed"
+  ],
+  "leak_terms": [
+    "vazad",
+    "vazou",
+    "vazamento",
+    "leak",
+    "leaked",
+    "build de desenvolvimento",
+    "dev build",
+    "pre-release",
+    "pré-release",
+    "código-fonte",
+    "source code",
+    "hack da rockstar",
+    "teapotuber"
+  ],
+  "honest_labels": {
+    "en": [
+      "TRAILER BREAKDOWN",
+      "COMMUNITY THEORY",
+      "HIDDEN DETAIL",
+      "WHAT THE TRAILER SHOWS"
+    ],
+    "pt": [
+      "ANÁLISE DO TRAILER",
+      "TEORIA DA COMUNIDADE",
+      "DETALHE ESCONDIDO",
+      "O QUE O TRAILER MOSTRA"
+    ]
+  },
+  "notes": "Jogo ainda não lançado: o único vídeo de jogo permitido é o dos trailers e imagens oficiais da Rockstar, sempre sem a trilha original, com narração e análise próprias. Depois do lançamento, a gameplay gravada por você passa a ser a fonte principal.",
+  "fallback_exclude_tags": [
+    "acao-leve",
+    "ambrosia",
+    "keys",
+    "sugestivo"
+  ],
+  "say_as": {
+    "en": {
+      "GTA 5": "GTA five",
+      "GTA V": "GTA five"
+    },
+    "pt": {
+      "GTA 5": "GTA cinco",
+      "GTA V": "GTA cinco"
+    }
+  },
+  "news_lang": {
+    "en": "hl=en-US&gl=US&ceid=US:en",
+    "pt": "hl=pt-BR&gl=BR&ceid=BR:pt-419"
+  },
+  "radar_exclude": [
+    "ai generated",
+    "ai-generated",
+    "concept",
+    "courtesy of",
+    "fake",
+    "fan made",
+    "fan trailer",
+    "fan-made",
+    "fanmade",
+    "footage via",
+    "gameplay footage via",
+    "gta 5",
+    "gta online",
+    "gta v",
+    "meme",
+    "memes",
+    "mod",
+    "mods",
+    "onlyindade",
+    "render",
+    "unreal engine",
+    "via @",
+    "video is out"
+  ],
+  "known_facts": "Grand Theft Auto V was released by Rockstar Games in 2013. Never describe details of an image you were not shown.",
+  "label_tags": {
+    "vice city": "cidade",
+    "leonida keys": "keys",
+    "grassrivers": "natureza",
+    "port gellhorn": null,
+    "ambrosia": "ambrosia",
+    "mount kalaga": "natureza"
+  }
+}

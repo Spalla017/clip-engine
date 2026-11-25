@@ -1,0 +1,126 @@
+#!/usr/bin/env node
+/**
+ * Bundle once, render many (adapted from AgriciDaniel/claude-shorts, MIT).
+ *
+ *   node render.mjs --jobs work/<slug>/jobs.json --root work/<slug> [--concurrency 6] [--gl angle] [--video-cache-gb 4]
+ *
+ * jobs.json: [{ "id": "v1", "composition": "ClassicViralShort" | "SplitAndZoomShort",
+ *               "props": {...}, "output": "render_v1.mp4" }]
+ * Every string in props that starts with "media:" is a path relative to --root and is
+ * served over a local HTTP server (Remotion does not read file:// URLs).
+ * Prints one JSON line per event; the last line is the summary.
+ */
+import { bundle } from "@remotion/bundler";
+import { renderMedia, renderStill, selectComposition, openBrowser } from "@remotion/renderer";
+import path from "path";
+import fs from "fs";
+import http from "http";
+import { fileURLToPath } from "url";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const log = (o) => console.log(JSON.stringify(o));
+
+const args = {};
+for (let i = 2; i < process.argv.length; i += 2) args[process.argv[i].replace(/^--/, "")] = process.argv[i + 1];
+if (!args.jobs || !args.root) {
+  console.error("usage: node render.mjs --jobs FILE --root DIR [--concurrency N]");
+  process.exit(1);
+}
+const root = path.resolve(args.root);
+const jobs = JSON.parse(fs.readFileSync(args.jobs, "utf-8"));
+
+const MIME = { ".mp4": "video/mp4", ".webm": "video/webm", ".wav": "audio/wav", ".mp3": "audio/mpeg", ".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".webp": "image/webp" };
+
+const server = http.createServer((req, res) => {
+  const rel = decodeURIComponent(req.url.split("?")[0].slice(1));
+  const file = path.resolve(root, rel);
+  if (!file.startsWith(root) || !fs.existsSync(file)) {
+    res.writeHead(404);
+    return res.end("Not found");
+  }
+  const size = fs.statSync(file).size;
+  const type = MIME[path.extname(file).toLowerCase()] || "application/octet-stream";
+  const m = /bytes=(\d*)-(\d*)/.exec(req.headers.range || "");
+  if (m) {
+    const start = m[1] ? Number(m[1]) : 0;
+    const end = m[2] ? Math.min(Number(m[2]), size - 1) : size - 1;
+    res.writeHead(206, { "Content-Type": type, "Accept-Ranges": "bytes", "Content-Range": `bytes ${start}-${end}/${size}`, "Content-Length": end - start + 1 });
+    return fs.createReadStream(file, { start, end }).pipe(res);
+  }
+  res.writeHead(200, { "Content-Type": type, "Accept-Ranges": "bytes", "Content-Length": size });
+  fs.createReadStream(file).pipe(res);
+});
+await new Promise((r) => server.listen(0, "127.0.0.1", r));
+const base = `http://127.0.0.1:${server.address().port}`;
+
+const resolveMedia = (v) => {
+  if (typeof v === "string") return v.startsWith("media:") ? `${base}/${v.slice(6).split("/").map(encodeURIComponent).join("/")}` : v;
+  if (Array.isArray(v)) return v.map(resolveMedia);
+  if (v && typeof v === "object") return Object.fromEntries(Object.entries(v).map(([k, x]) => [k, resolveMedia(x)]));
+  return v;
+};
+
+const t0 = Date.now();
+const serveUrl = await bundle({ entryPoint: path.resolve(__dirname, "src/index.ts"), publicDir: path.resolve(__dirname, "public") });
+log({ action: "bundle", sec: ((Date.now() - t0) / 1000).toFixed(1) });
+// ANGLE = Chrome draws with the GPU (D3D11 on the RTX) instead of software GL.
+const chromiumOptions = { gl: args.gl || "angle" };
+const concurrency = Number(args.concurrency || 6);
+const offthreadVideoCacheSizeInBytes = Number(args["video-cache-gb"] || 4) * 1024 ** 3;
+const browser = await openBrowser("chrome", { chromiumOptions });
+const results = [];
+
+try {
+  for (const job of jobs) {
+    const inputProps = resolveMedia(job.props);
+    const out = path.resolve(root, job.output);
+    let ok = false;
+    let error = "";
+    for (let attempt = 1; attempt <= 2 && !ok; attempt++) {
+      try {
+        const t1 = Date.now();
+        if (args.still) {
+          // Still previews (no video): --still "2.5,18,40" writes one PNG per time.
+          const comp = await selectComposition({ serveUrl, id: job.composition, inputProps, puppeteerInstance: browser, chromiumOptions, offthreadVideoCacheSizeInBytes });
+          for (const t of String(args.still).split(",").map(Number)) {
+            const frame = Math.min(comp.durationInFrames - 1, Math.round(t * comp.fps));
+            await renderStill({ composition: comp, serveUrl, inputProps, frame, puppeteerInstance: browser, chromiumOptions, imageFormat: "jpeg", jpegQuality: 85,
+              output: path.resolve(root, `still_${job.id}_${String(t).replace(".", "_")}.jpg`) });
+          }
+          ok = true;
+          log({ action: "still", id: job.id, status: "complete" });
+          break;
+        }
+        const composition = await selectComposition({ serveUrl, id: job.composition, inputProps, puppeteerInstance: browser, chromiumOptions, offthreadVideoCacheSizeInBytes });
+        await renderMedia({
+          composition,
+          serveUrl,
+          codec: "h264",
+          crf: 14,
+          // Layouts are authored at 1080x1920 (final = scale 1, user law I 2026-11-20: final 1080x1920@30; drafts --scale 0.5 = 540x960). Old 1440p60 = --scale 1.3333.
+          scale: Number(args.scale || 1),
+          // --range "t0:t1" (s, 2026-11-21): renderiza só esse trecho (patch); emendar com criar-video-animado/scripts/splice.py
+          ...(args.range ? { frameRange: String(args.range).split(":").map((t, i) => Math.min(composition.durationInFrames - 1, i ? Math.ceil(+t * composition.fps) - 1 : Math.floor(+t * composition.fps))) } : {}),
+          x264Preset: "veryfast", // intermediate file: the pipeline re-encodes
+          outputLocation: out,
+          inputProps,
+          puppeteerInstance: browser,
+          chromiumOptions,
+          concurrency,
+          offthreadVideoCacheSizeInBytes,
+        });
+        ok = true;
+        log({ action: "render", id: job.id, status: "complete", sec: ((Date.now() - t1) / 1000).toFixed(1), frames: composition.durationInFrames, fps: (composition.durationInFrames / ((Date.now() - t1) / 1000)).toFixed(1), mb: (fs.statSync(out).size / 1048576).toFixed(1) });
+      } catch (e) {
+        error = e.message;
+        log({ action: "render", id: job.id, status: attempt < 2 ? "retrying" : "failed", error: error.slice(0, 600) });
+      }
+    }
+    results.push({ id: job.id, output: out, status: ok ? "complete" : "failed", error: ok ? undefined : error.slice(0, 600) });
+  }
+} finally {
+  await browser.close({ silent: true });
+  server.close();
+}
+log({ action: "render_complete", results });
+process.exit(results.every((r) => r.status === "complete") ? 0 : 1);
